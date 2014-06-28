@@ -1,4 +1,4 @@
-trace
+trace [![GoDoc](https://godoc.org/github.com/VividCortex/trace?status.png)](https://godoc.org/github.com/VividCortex/trace)
 =====
 Trace is a simple package that helps with debugging.
 

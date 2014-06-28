@@ -88,7 +88,7 @@ func Trace(args ...interface{}) {
 	fmt.Fprintln(output, traceLine, message)
 }
 
-// Trace prints the goroutine number, file, line number, and name
+// Tracef prints the goroutine number, file, line number, and name
 // of the calling function, as well as any optional arguments printed
 // with a specific format.
 func Tracef(format string, args ...interface{}) {
