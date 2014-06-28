@@ -2,13 +2,49 @@ package trace
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"runtime"
 )
 
-// Enabled toggles trace prints to stdout.
-var Enabled = true
+var (
+	enabled = true
+	output  = io.Writer(os.Stdout)
+)
 
+// Enable enables trace prints to stdout.
+func Enable() {
+	enabled = true
+}
+
+// Disable disables trace prints to stdout.
+func Disable() {
+	enabled = false
+}
+
+// SetWriter sets the output of trace lines
+// to an io.Writer.
+func SetWriter(writer io.Writer) {
+	output = writer
+}
+
+// SetOutputFile creates a file at filename and sets it as the output destination.
+// If filename points to an existing file, it will be truncated. An error is returned
+// if the file could not be opened.
+func SetOutputFile(filename string) error {
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+
+	output = f
+
+	return nil
+}
+
+// goroutineNum returns the goroutine number
+// the caller is running on.
 func goroutineNum() int {
 	b := make([]byte, 20)
 	runtime.Stack(b, false)
@@ -18,20 +54,58 @@ func goroutineNum() int {
 	return goroutineNum
 }
 
-// Trace prints the goroutine number, file, line number, and name
-// of the calling function.
-func Trace() {
-	if !Enabled {
-		return
-	}
-
-	pc, file, line, ok := runtime.Caller(1)
+func getTraceLine() string {
+	pc, file, line, ok := runtime.Caller(2)
 	if !ok {
-		return
+		return ""
 	}
 
 	caller := runtime.FuncForPC(pc)
 	goroutine := goroutineNum()
 
-	fmt.Printf("[trace - goroutine %d] %s:%d %s\n", goroutine, filepath.Base(file), line, caller.Name())
+	return fmt.Sprintf("[goroutine %d] %s:%d %s",
+		goroutine, filepath.Base(file), line, caller.Name())
+}
+
+// Trace prints the goroutine number, file, line number, and name
+// of the calling function, as well as any optional arguments.
+func Trace(args ...interface{}) {
+	if !enabled {
+		return
+	}
+
+	traceLine := getTraceLine()
+	if traceLine == "" {
+		return
+	}
+
+	message := fmt.Sprint(args...)
+
+	if message != "" {
+		message = "[" + message + "]"
+	}
+
+	fmt.Fprintln(output, traceLine, message)
+}
+
+// Trace prints the goroutine number, file, line number, and name
+// of the calling function, as well as any optional arguments printed
+// with a specific format.
+func Tracef(format string, args ...interface{}) {
+	if !enabled {
+		return
+	}
+
+	traceLine := getTraceLine()
+	if traceLine == "" {
+		return
+	}
+
+	message := fmt.Sprintf(format, args...)
+
+	if message != "" {
+		message = "[" + message + "]"
+	}
+
+	fmt.Fprintln(output, traceLine, message)
 }
