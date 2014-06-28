@@ -22,7 +22,7 @@ import (
 
 func worker(id int, jobs <-chan int, results chan<- int) {
 	for j := range jobs {
-		trace.Trace()
+		trace.Trace(j)
 
 		fmt.Println("worker", id, "processing job", j)
 		time.Sleep(time.Second)
@@ -53,22 +53,22 @@ func main() {
 Running the program prints the following:
 
 ```
-[trace - goroutine 20] tracetest.go:12 main.worker
+[goroutine 20] traceTest.go:12 main.worker [1]
 worker 1 processing job 1
-[trace - goroutine 21] tracetest.go:12 main.worker
+[goroutine 21] traceTest.go:12 main.worker [2]
 worker 2 processing job 2
-[trace - goroutine 22] tracetest.go:12 main.worker
+[goroutine 22] traceTest.go:12 main.worker [3]
 worker 3 processing job 3
-[trace - goroutine 20] tracetest.go:12 main.worker
+[goroutine 20] traceTest.go:12 main.worker [4]
 worker 1 processing job 4
-[trace - goroutine 21] tracetest.go:12 main.worker
+[goroutine 21] traceTest.go:12 main.worker [5]
 worker 2 processing job 5
-[trace - goroutine 22] tracetest.go:12 main.worker
+[goroutine 22] traceTest.go:12 main.worker [6]
 worker 3 processing job 6
-[trace - goroutine 20] tracetest.go:12 main.worker
+[goroutine 20] traceTest.go:12 main.worker [7]
 worker 1 processing job 7
-[trace - goroutine 21] tracetest.go:12 main.worker
+[goroutine 21] traceTest.go:12 main.worker [8]
 worker 2 processing job 8
-[trace - goroutine 22] tracetest.go:12 main.worker
+[goroutine 22] traceTest.go:12 main.worker [9]
 worker 3 processing job 9
 ```
