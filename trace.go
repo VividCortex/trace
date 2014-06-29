@@ -6,26 +6,37 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sync"
 )
 
 var (
 	enabled = true
 	output  = io.Writer(os.Stdout)
+	lock    = sync.Mutex{}
 )
 
 // Enable enables trace prints to stdout.
 func Enable() {
+	lock.Lock()
+	defer lock.Unlock()
+
 	enabled = true
 }
 
 // Disable disables trace prints to stdout.
 func Disable() {
+	lock.Lock()
+	defer lock.Unlock()
+
 	enabled = false
 }
 
 // SetWriter sets the output of trace lines
 // to an io.Writer.
 func SetWriter(writer io.Writer) {
+	lock.Lock()
+	defer lock.Unlock()
+
 	output = writer
 }
 
@@ -33,6 +44,9 @@ func SetWriter(writer io.Writer) {
 // If filename points to an existing file, it will be truncated. An error is returned
 // if the file could not be opened.
 func SetOutputFile(filename string) error {
+	lock.Lock()
+	defer lock.Unlock()
+
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
