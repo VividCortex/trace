@@ -15,7 +15,7 @@ var (
 	lock    = sync.Mutex{}
 )
 
-// Enable enables trace prints to stdout.
+// Enable enables tracing.
 func Enable() {
 	lock.Lock()
 	defer lock.Unlock()
@@ -23,7 +23,7 @@ func Enable() {
 	enabled = true
 }
 
-// Disable disables trace prints to stdout.
+// Disable disables tracing.
 func Disable() {
 	lock.Lock()
 	defer lock.Unlock()
