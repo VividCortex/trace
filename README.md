@@ -2,6 +2,9 @@ trace [![GoDoc](https://godoc.org/github.com/VividCortex/trace?status.png)](http
 =====
 Trace is a simple package that helps with debugging.
 
+> The most effective debugging tool is still careful thought, coupled with judiciously placed print statements.
+> — Brian Kernighan
+
 `trace.Trace()` prints the goroutine number, file, line number, and name
 of the calling function.
 
