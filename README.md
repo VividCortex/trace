@@ -72,3 +72,14 @@ worker 2 processing job 8
 [goroutine 22] traceTest.go:12 main.worker [9]
 worker 3 processing job 9
 ```
+
+Contributing
+---
+We only accept pull requests for minor fixes or improvements. This includes:
+
+* Small bug fixes
+* Typos
+* Documentation or comments
+
+Please open issues to discuss new features. Pull requests for new features will be rejected,
+so we recommend forking the repository and making changes in your fork for your use case.
